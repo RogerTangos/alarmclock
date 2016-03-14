@@ -9,6 +9,21 @@
 
 #define UPDATE_PERIOD 100 // .01 second , use even numbers
 
+// color at sunrise
+#define START_R 182;
+#define START_G 126;
+#define START_B 91;
+#define START_W 0;
+#define START_BRIGHT 0.0;
+
+// color at noon
+#define END_R 255;
+#define END_G 254;
+#define END_B 230;
+#define END_W 0;
+#define END_BRIGHT 1.0;
+
+
 #define START_SATURATION 255
 #define START_HUE 0
 #define START_VALUE 0
@@ -58,6 +73,8 @@ void stopAlarm(){
   Serial.print("\n--STOP ALARM--\n");
   alarmOn = false;
 
+
+
   color.saturation = START_SATURATION;
   color.hue = START_HUE;
   color.value = START_VALUE;
@@ -65,12 +82,21 @@ void stopAlarm(){
   }
 
 void write() {
+
+
+  analogWrite(REDPIN, value);
+
+
+
+
+
+
   CRGB rgb;
   hsv2rgb_rainbow(color, rgb);
 
-  analogWrite(REDPIN,   255-rgb.r );
-  analogWrite(GREENPIN, 255-rgb.g );
-  analogWrite(BLUEPIN,  255-rgb.b );
+  analogWrite(REDPIN,   rgb.r );
+  analogWrite(GREENPIN, rgb.g );
+  analogWrite(BLUEPIN,  rgb.b );
 }
 
 void runAlarm() {
@@ -124,7 +150,6 @@ void loop() {
   // Serial.print("\n---\n");
 
   write();
-  FastLED.delay(UPDATE_PERIOD-1);
-  Alarm.delay(1);
+  Alarm.delay(UPDATE_PERIOD);
 
 }
